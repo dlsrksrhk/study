@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시 필요
-@Rollback(false) // 테스트 후에도 데이터가 남도록 설정
+@Rollback(true) // 테스트 후에도 데이터가 남도록 설정
 public class UserServiceTest {
 
     @Autowired
@@ -48,6 +48,9 @@ public class UserServiceTest {
 
         List<User> allUsersFromCache = userService.getAllUsers();
         System.out.println("allUsersFromCache - " + allUsersFromCache);
+
+        userService.deleteUser(1L);
+        userService.getAllUsers();
     }
 
     @Test

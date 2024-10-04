@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sweet.dh.studyhard.entity.Department;
@@ -32,12 +33,17 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    @CachePut(value = "userCache", key = "#user.id")
+
+    @Caching(put = {@CachePut(value = "userCache", key = "#user.id")},
+            evict = {@CacheEvict(value = "userCache", key = "'allUsers'")})
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    @CacheEvict(value = "userCache", key = "#id")
+    @Caching(evict = {
+            @CacheEvict(value = "userCache", key = "'allUsers'"),
+            @CacheEvict(value = "userCache", key = "#id")
+    })
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

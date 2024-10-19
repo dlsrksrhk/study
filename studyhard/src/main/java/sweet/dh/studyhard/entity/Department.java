@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "departments"})
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +20,6 @@ public class Department {
     private String deptName;
 
     @ManyToMany(mappedBy = "departments")
-    private List<User> users = new ArrayList<>();
+    private List<User> members = new ArrayList<>();
 
 }

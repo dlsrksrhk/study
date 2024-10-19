@@ -26,4 +26,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "department_id") // 반대편 엔티티와 연결된 외래 키
     )
     private List<Department> departments = new ArrayList<>();
+
+    public void addDepartment(Department department) {
+        departments.add(department);
+        department.getMembers().add(this);
+    }
+
+    public void removeDepartment(Department department) {
+        departments.remove(department);
+        department.getMembers().remove(this);
+    }
 }

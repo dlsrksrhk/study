@@ -2,6 +2,7 @@ package sweet.dh.studyhard.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -15,17 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // 실제 DB 사용 시 필요
-@Rollback(true) // 테스트 후에도 데이터가 남도록 설정
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Rollback(false)
 public class UserServiceTest {
 
+    @Qualifier("userServiceImpl")
     @Autowired
     private UserService userService;
 
     @Autowired
     private CacheUtil cacheUtil;
 
-    private String CACHE_NAME = "userCache";
+    private final String CACHE_NAME = "userCache";
 
     @Test
     public void testSaveUser() {
@@ -44,7 +46,7 @@ public class UserServiceTest {
     @Test
     public void testCacheAfterSave() {
         List<User> allUsers = userService.getAllUsers();
-        cacheUtil.printCacheContents(CACHE_NAME);
+        System.out.println("found in cache : " + cacheUtil.findCacheContents(CACHE_NAME));;
 
         List<User> allUsersFromCache = userService.getAllUsers();
         System.out.println("allUsersFromCache - " + allUsersFromCache);
@@ -61,5 +63,19 @@ public class UserServiceTest {
         // Then
         assertNotNull(users);
         assertFalse(users.isEmpty()); // 데이터가 있는지 확인
+    }
+
+    @Test
+    public void testDelete() {
+        // Given
+        User newUser = new User();
+        newUser.setUserName("Jane Doe33");
+        User savedUser = userService.saveUser(newUser);
+
+        // When
+        userService.deleteUser(savedUser.getId());
+
+        // Then
+        assertNull(userService.getUserById(savedUser.getId()));
     }
 }

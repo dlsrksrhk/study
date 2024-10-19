@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -13,18 +15,19 @@ public class CacheUtil {
 
     private final CacheManager cacheManager;
 
-    public void printCacheContents(String cacheName) {
+    public Map<String, Object> findCacheContents(String cacheName) {
         System.out.println("printCacheContents() print start --------------------------------");
-        Cache cache = cacheManager.getCache(cacheName);
+        Cache<Object, Object> cache = cacheManager.getCache(cacheName, Object.class, Object.class);
+        Map<String, Object> cacheContents = new HashMap<>();
 
         if (cache != null) {
-            Iterator<Cache.Entry<Long, Object>> iterator = cache.iterator();
+            Iterator<Cache.Entry<Object, Object>> iterator = cache.iterator();
             while (iterator.hasNext()) {
-                Cache.Entry<Long, Object> entry = iterator.next();
-                System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+                Cache.Entry<Object, Object> entry = iterator.next();
+                cacheContents.put(entry.getKey()+"", entry.getValue());
             }
-        } else {
-            System.out.println("캐시 '" + cacheName + "'을(를) 찾을 수 없습니다.");
         }
+
+        return cacheContents;
     }
 }

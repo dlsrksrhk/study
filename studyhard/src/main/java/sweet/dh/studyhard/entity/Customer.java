@@ -50,4 +50,8 @@ public class Customer {
     public List<CustomerAddress> getAddresses() {
         return Collections.unmodifiableList(addresses);
     }
+
+    public void clearAddresses() {
+        this.addresses.clear();
+    }
 }

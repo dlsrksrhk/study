@@ -2,6 +2,8 @@ package sweet.dh.studyhard.event;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -17,21 +19,10 @@ public class UserEventListener {
         this.userService = userService;
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener
     public void handleUserCreatedEvent(UserCreatedEvent event) {
-        System.out.println("User created successfully!");
-        System.out.println("User ID: " + event.getUserId());
-        System.out.println("Username: " + event.getUserName());
-        // do something with the event
-        boolean isTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
-        boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
-        String transactionName = TransactionSynchronizationManager.getCurrentTransactionName();
-
-        System.out.println("Transaction active: " + isTransactionActive);
-        System.out.println("Transaction read-only: " + isReadOnly);
-        System.out.println("Transaction name: " + transactionName);
         User user = userService.getUserById(event.getUserId());
         user.setAge(30L);
-//        throw new RuntimeException();
     }
 }

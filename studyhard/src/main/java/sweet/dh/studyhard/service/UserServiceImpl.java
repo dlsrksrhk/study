@@ -41,18 +41,8 @@ public class UserServiceImpl implements UserService {
     @Caching(put = {@CachePut(value = "userCache", key = "#user.id")},
             evict = {@CacheEvict(value = "userCache", key = "'allUsers'")})
     public User saveUser(User user) {
-        boolean isTransactionActive = TransactionSynchronizationManager.isActualTransactionActive();
-        boolean isReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly();
-        String transactionName = TransactionSynchronizationManager.getCurrentTransactionName();
-
-        System.out.println("Transaction active: " + isTransactionActive);
-        System.out.println("Transaction read-only: " + isReadOnly);
-        System.out.println("Transaction name: " + transactionName);
-
         userRepository.save(user);
         eventPublisher.publishEvent(new UserCreatedEvent(user.getId(), user.getUserName()));
-
-        System.out.println("Transaction is commited()");
         return user;
     }
 

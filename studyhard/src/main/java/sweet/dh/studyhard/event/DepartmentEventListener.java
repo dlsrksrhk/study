@@ -10,5 +10,6 @@ public class DepartmentEventListener implements ApplicationListener<DepartmentEv
     @Override
     public void onApplicationEvent(DepartmentEvent event) {
         log.info("Department Event Listener: {}, {}", event.getDeptId(), event.getDeptName());
+//        throw new RuntimeException();
     }
 }

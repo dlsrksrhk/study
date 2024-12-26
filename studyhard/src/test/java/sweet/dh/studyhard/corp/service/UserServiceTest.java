@@ -46,7 +46,7 @@ public class UserServiceTest {
     @Test
     public void testCacheAfterSave() {
         List<User> allUsers = userService.getAllUsers();
-        System.out.println("found in cache : " + cacheUtil.findCacheContents(CACHE_NAME));;
+        System.out.println("found in cache : " + cacheUtil.findCacheContents(CACHE_NAME));
 
         List<User> allUsersFromCache = userService.getAllUsers();
         System.out.println("allUsersFromCache - " + allUsersFromCache);

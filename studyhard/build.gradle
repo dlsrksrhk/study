@@ -32,7 +32,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
+//    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
 
     implementation 'org.ehcache:ehcache:3.10.8' // Ehcache 3.x 최신 버전을 사용하세요
 //    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
